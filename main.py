@@ -86,4 +86,4 @@ def on_connect():
 
 # Start the Flask app with SocketIO
 if __name__ == '__main__':
-    socketio.run(app, debug=False)
+    socketio.run(app, debug=False, allow_unsafe_werkzeug=True)
