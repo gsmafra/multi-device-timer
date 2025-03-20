@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Timer App</title>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.1/dist/socket.io.min.js"></script>
+    <script>
+        var socket = io.connect('http://127.0.0.1:5000');
+        
+        // When the timer finishes
+        socket.on('timer_finished', function() {
+            alert("Timer finished!");
+        });
+
+        // Update the timer display
+        socket.on('update_timer', function(data) {
+            document.getElementById("timerDisplay").innerText = formatTime(data.time_left);
+        });
+
+        // Format time in mm:ss format
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var remainingSeconds = seconds % 60;
+            return minutes + ":" + (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds);
+        }
+
+        // Start the timer
+        function startTimer() {
+            var duration = parseInt(document.getElementById("durationInput").value) * 60;
+            fetch('/start/' + duration);
+        }
+
+        // Pause the timer
+        function pauseTimer() {
+            fetch('/pause');
+        }
+
+        // Reset the timer
+        function resetTimer() {
+            fetch('/reset');
+        }
+    </script>
+</head>
+<body>
+    <h1>Timer App</h1>
+    <div>
+        <h2 id="timerDisplay">00:00</h2>
+        <input type="number" id="durationInput" placeholder="Enter duration in minutes" />
+        <button onclick="startTimer()">Start Timer</button>
+        <button onclick="pauseTimer()">Pause Timer</button>
+        <button onclick="resetTimer()">Reset Timer</button>
+    </div>
+</body>
+</html>
