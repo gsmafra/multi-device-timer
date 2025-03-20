@@ -8,9 +8,14 @@
     <script>
         var socket = io.connect('http://127.0.0.1:5000');
         
+        // Preload the audio file
+        var audio = new Audio('static/siren-alert-96052.mp3');
+
         // When the timer finishes
         socket.on('timer_finished', function() {
-            alert("Timer finished!");
+            audio.currentTime = 0;  // Reset playback position
+            audio.play();  // Play the sound
+            alert("Timer finished!");  // Optionally, show a message
         });
 
         // Update the timer display
