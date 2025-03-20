@@ -1,11 +1,11 @@
-from os import environ
-
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
 import time
 import threading
+from os import environ
+
 import firebase_admin
 from firebase_admin import credentials, db
+from flask import Flask, render_template
+from flask_socketio import SocketIO, emit
 
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate(environ['FIREBASE_KEY_PATH'])
