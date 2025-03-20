@@ -1,54 +1,65 @@
+from os import environ
+
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 import time
 import threading
+import firebase_admin
+from firebase_admin import credentials, db
+
+# Initialize Firebase Admin SDK
+cred = credentials.Certificate(environ['FIREBASE_KEY_PATH'])
+firebase_admin.initialize_app(cred, {'databaseURL': 'https://multi-device-timer-default-rtdb.firebaseio.com/'})
 
 app = Flask(__name__)
 socketio = SocketIO(app)
 
-# Timer state variables
-timer_running = False
-time_left = 0
-start_time = 0
+# Firebase database reference
+timer_ref = db.reference('timer')
 
 # Timer function
 def run_timer():
-    global time_left, timer_running, start_time
-    while timer_running:
-        time.sleep(1)
-        if timer_running:
-            elapsed_time = int(time.time() - start_time)
-            time_left = max(0, time_left - elapsed_time)
-            start_time = time.time()  # Reset start time
+    while True:
+        timer_data = timer_ref.get()
+        if timer_data and timer_data['running']:
+            time.sleep(1)
+            elapsed_time = int(time.time() - timer_data['start_time'])
+            time_left = max(0, timer_data['time_left'] - elapsed_time)
+            timer_ref.update({
+                'time_left': time_left,
+                'start_time': time.time()  # Reset start time
+            })
             socketio.emit('update_timer', {'time_left': time_left})
             if time_left == 0:
                 socketio.emit('timer_finished')
-                timer_running = False
+                timer_ref.update({'running': False})
 
 # Start the timer
 @app.route('/start/<int:duration>')
 def start_timer(duration):
-    global timer_running, time_left, start_time
-    time_left = duration
-    start_time = time.time()
-    timer_running = True
+    timer_ref.set({
+        'running': True,
+        'time_left': duration,
+        'start_time': time.time()
+    })
     threading.Thread(target=run_timer, daemon=True).start()
     return 'Timer started'
 
 # Pause the timer
 @app.route('/pause')
 def pause_timer():
-    global timer_running
-    timer_running = False
+    timer_ref.update({'running': False})
     return 'Timer paused'
 
 # Reset the timer
 @app.route('/reset')
 def reset_timer():
-    global timer_running, time_left
-    timer_running = False
-    time_left = 0
-    socketio.emit('update_timer', {'time_left': time_left})
+    timer_ref.set({
+        'running': False,
+        'time_left': 0,
+        'start_time': 0
+    })
+    socketio.emit('update_timer', {'time_left': 0})
     return 'Timer reset'
 
 # Home route - serves the web interface
@@ -59,6 +70,8 @@ def index():
 # SocketIO event handling
 @socketio.on('connect')
 def on_connect():
+    timer_data = timer_ref.get()
+    time_left = timer_data['time_left'] if timer_data else 0
     emit('update_timer', {'time_left': time_left})
 
 # Start the Flask app with SocketIO
