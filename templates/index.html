@@ -5,18 +5,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Timer App</title>
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.1/dist/socket.io.min.js"></script>
+    <style>
+        /* Flashing effect */
+        .flashing {
+            animation: flash 1s infinite;
+        }
+
+        @keyframes flash {
+            0%, 100% {
+                background-color: white;
+            }
+            50% {
+                background-color: red;
+            }
+        }
+    </style>
     <script>
         var socket = io.connect('http://127.0.0.1:5000');
         
         // Preload the audio file
         var audio = new Audio('static/siren-alert-96052.mp3');
+        audio.loop = true; // Enable looping
 
         // When the timer finishes
         socket.on('timer_finished', function() {
             audio.currentTime = 0;  // Reset playback position
             audio.play();  // Play the sound
-            alert("Timer finished!");  // Optionally, show a message
+            document.body.classList.add('flashing'); // Start flashing
         });
+
+        // Stop the audio playback and flashing effect
+        function dismissAlert() {
+            audio.pause();
+            audio.currentTime = 0; // Reset playback position
+            document.body.classList.remove('flashing'); // Stop flashing
+        }
 
         // Update the timer display
         socket.on('update_timer', function(data) {
@@ -55,6 +78,7 @@
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="pauseTimer()">Pause Timer</button>
         <button onclick="resetTimer()">Reset Timer</button>
+        <button onclick="dismissAlert()">Dismiss Alert</button> <!-- Button to stop audio and flashing -->
     </div>
 </body>
 </html>
