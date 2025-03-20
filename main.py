@@ -51,6 +51,16 @@ def pause_timer():
     timer_ref.update({'running': False})
     return 'Timer paused'
 
+# Resume the timer
+@app.route('/resume')
+def resume_timer():
+    # Reset start_time on resume to avoid a jump in elapsed time
+    timer_ref.update({
+        'running': True,
+        'start_time': time.time()
+    })
+    return 'Timer resumed'
+
 # Reset the timer
 @app.route('/reset')
 def reset_timer():

@@ -53,20 +53,21 @@
             return minutes + ":" + (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds);
         }
 
-        // Start the timer
         function startTimer() {
             var duration = parseInt(document.getElementById("durationInput").value) * 60;
             fetch('/start/' + duration);
         }
 
-        // Pause the timer
         function pauseTimer() {
             fetch('/pause');
         }
 
-        // Reset the timer
         function resetTimer() {
             fetch('/reset');
+        }
+
+        function resumeTimer() {
+            fetch('/resume');
         }
     </script>
 </head>
@@ -77,8 +78,9 @@
         <input type="number" id="durationInput" placeholder="Enter duration in minutes" />
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="pauseTimer()">Pause Timer</button>
+        <button onclick="resumeTimer()">Resume Timer</button>
         <button onclick="resetTimer()">Reset Timer</button>
-        <button onclick="dismissAlert()">Dismiss Alert</button> <!-- Button to stop audio and flashing -->
+        <button onclick="dismissAlert()">Dismiss Alert</button>
     </div>
 </body>
 </html>
