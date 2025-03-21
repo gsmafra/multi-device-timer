@@ -21,7 +21,8 @@
         }
     </style>
     <script>
-        var socket = io.connect('http://127.0.0.1:5000');
+        // Use a relative URL so the client connects back to the deployment host
+        var socket = io();
         
         // Preload the audio file
         var audio = new Audio('static/siren-alert-96052.mp3');
