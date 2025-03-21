@@ -19,6 +19,15 @@
                 background-color: red;
             }
         }
+        /* Style for the time input */
+        #timerDisplay {
+            font-size: 2em;
+            text-align: center;
+            width: 150px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            padding: 5px;
+        }
     </style>
     <script>
         // Use a relative URL so the client connects back to the deployment host
@@ -42,9 +51,9 @@
             document.body.classList.remove('flashing'); // Stop flashing
         }
 
-        // Update the timer display
+        // Update the timer display (the input value)
         socket.on('update_timer', function(data) {
-            document.getElementById("timerDisplay").innerText = formatTime(data.time_left);
+            document.getElementById("timerDisplay").value = formatTime(data.time_left);
         });
 
         // Format time in hh:mm:ss format
@@ -57,25 +66,55 @@
                (remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds);
         }
 
+        // Parse a time string (hh:mm:ss) into seconds
+        function parseTime(timeStr) {
+            var parts = timeStr.split(":");
+            if (parts.length !== 3) return 0;
+            var hours = parseInt(parts[0]) || 0;
+            var minutes = parseInt(parts[1]) || 0;
+            var seconds = parseInt(parts[2]) || 0;
+            return hours * 3600 + minutes * 60 + seconds;
+        }
+
+        // When not running, the input should be editable.
+        // While running, we lock it by setting the readonly attribute.
+        function lockTimerInput(locked) {
+            var timerInput = document.getElementById("timerDisplay");
+            if (locked) {
+                timerInput.setAttribute("readonly", true);
+            } else {
+                timerInput.removeAttribute("readonly");
+            }
+        }
+
         function startTimer() {
-            // Get values from three inputs
-            var hours = parseInt(document.getElementById("hoursInput").value) || 0;
-            var minutes = parseInt(document.getElementById("minutesInput").value) || 0;
-            var seconds = parseInt(document.getElementById("secondsInput").value) || 0;
-            // Calculate total duration in seconds
-            var duration = (hours * 3600) + (minutes * 60) + seconds;
+            var timerInput = document.getElementById("timerDisplay");
+            // Parse the input (expected format: hh:mm:ss)
+            var duration = parseTime(timerInput.value);
+            if (duration <= 0) {
+                alert("Please enter a valid time in hh:mm:ss format.");
+                return;
+            }
+            // Lock the timer input while running
+            lockTimerInput(true);
             fetch('/start/' + duration);
         }
 
         function pauseTimer() {
             fetch('/pause');
+            // Optionally unlock the input on pause (depending on desired UX)
+            lockTimerInput(false);
         }
 
         function resetTimer() {
             fetch('/reset');
+            // Unlock the timer input so it can be edited
+            lockTimerInput(false);
         }
 
         function resumeTimer() {
+            // Lock the input again
+            lockTimerInput(true);
             fetch('/resume');
         }
     </script>
@@ -83,11 +122,8 @@
 <body>
     <h1>Timer App</h1>
     <div>
-        <h2 id="timerDisplay">00:00:00</h2>
-        <!-- Three inputs for hh:mm:ss  -->
-        <input type="number" id="hoursInput" placeholder="HH" min="0" style="width: 50px;" />
-        <input type="number" id="minutesInput" placeholder="MM" min="0" max="59" style="width: 50px;" />
-        <input type="number" id="secondsInput" placeholder="SS" min="0" max="59" style="width: 50px;" />
+        <!-- Single input for both display and editing -->
+        <input type="text" id="timerDisplay" value="00:00:00" placeholder="hh:mm:ss" />
         <br/><br/>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="pauseTimer()">Pause Timer</button>
