@@ -1,3 +1,5 @@
+APScheduler==3.11.0
+backports.zoneinfo==0.2.1
 bidict==0.23.1
 blinker==1.8.2
 CacheControl==0.14.2
@@ -42,6 +44,7 @@ python-socketio==5.12.1
 requests==2.32.3
 rsa==4.9
 simple-websocket==1.1.0
+tzlocal==5.2
 uritemplate==4.1.1
 urllib3==2.2.3
 Werkzeug==3.0.6
