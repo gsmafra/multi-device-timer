@@ -90,3 +90,13 @@ body {
     gap: 12px;
     margin-top: 1.5em;
 }
+
+.active-container {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9em;
+    color: #555;
+}

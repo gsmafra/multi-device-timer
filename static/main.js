@@ -1,18 +1,30 @@
 // Set up your Socket.IO connection
 var socket = io();
 
+// Generate/retrieve a unique device ID
+var myDeviceId = localStorage.getItem('deviceId');
+if (!myDeviceId) {
+    myDeviceId = 'device-' + Math.random().toString(36).substr(2, 8);
+    localStorage.setItem('deviceId', myDeviceId);
+}
+var currentActiveDevice = null; // will be set by socket event
+
 // Preload the audio file
 var audio = new Audio('static/siren-alert-96052.mp3');
 audio.loop = true; // Enable looping
 
-// When the timer finishes
+// When the timer finishes, trigger alert only if active
 socket.on('timer_finished', function() {
-    audio.currentTime = 0; // Reset playback position
-    audio.play();          // Play the sound
-    document.body.classList.add('flashing'); // Start flashing effect
+    if (myDeviceId === currentActiveDevice) {
+        audio.currentTime = 0;
+        audio.play();
+        document.body.classList.add('flashing');
+    } else {
+        console.log('Timer finished, but this device is not active.');
+    }
 });
 
-// Stop the audio playback and flashing effect
+// Stop the alert
 function dismissAlert() {
     audio.pause();
     audio.currentTime = 0;
@@ -22,6 +34,19 @@ function dismissAlert() {
 // Update the timer display (the input value)
 socket.on('update_timer', function(data) {
     document.getElementById("timerDisplay").value = formatTime(data.time_left);
+});
+
+// Listen for active device updates
+socket.on('active_device', function(data) {
+    currentActiveDevice = data.active_device;
+    var activeStatusElem = document.getElementById('activeStatus');
+    if (currentActiveDevice === myDeviceId) {
+        activeStatusElem.textContent = "This is the active device";
+    } else if (currentActiveDevice) {
+        activeStatusElem.textContent = "Active device: " + currentActiveDevice;
+    } else {
+        activeStatusElem.textContent = "No active device";
+    }
 });
 
 // Format seconds into hh:mm:ss format
@@ -44,7 +69,7 @@ function parseTime(timeStr) {
     return hours * 3600 + minutes * 60 + seconds;
 }
 
-// Lock or unlock the timer input based on whether the timer is running
+// Lock or unlock the timer input based on running state
 function lockTimerInput(locked) {
     var timerInput = document.getElementById("timerDisplay");
     if (locked) {
@@ -76,7 +101,14 @@ function resumeTimer() {
 }
 
 function presetTimer(duration) {
-    // This function restarts the timer with a preset duration.
     lockTimerInput(true);
     fetch('/start/' + duration);
+}
+
+// Claim active: tells the server this device wants to be the active device.
+function claimActive() {
+    fetch('/claim_active/' + myDeviceId)
+        .then(response => response.text())
+        .then(txt => console.log("Claim active response:", txt))
+        .catch(err => console.error(err));
 }

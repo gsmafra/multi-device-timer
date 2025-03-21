@@ -61,6 +61,15 @@ def resume_timer():
     })
     return 'Timer resumed'
 
+# Add an endpoint to claim active status
+@app.route('/claim_active/<deviceid>')
+def claim_active(deviceid):
+    active_ref = db.reference('active_device')
+    active_ref.set(deviceid)
+    # Emit new active device to all clients
+    socketio.emit('active_device', {'active_device': deviceid})
+    return 'Active device claimed'
+
 # Home route - serves the web interface
 @app.route('/')
 def index():
@@ -72,6 +81,9 @@ def on_connect():
     timer_data = timer_ref.get()
     time_left = timer_data['time_left'] if timer_data else 0
     emit('update_timer', {'time_left': time_left})
+    active_ref = db.reference('active_device')
+    active = active_ref.get() or ''
+    emit('active_device', {'active_device': active})
 
 # Start the Flask app with SocketIO
 if __name__ == '__main__':
