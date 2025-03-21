@@ -69,3 +69,15 @@ body {
         background-color: #ffcccc;
     }
 }
+
+.buttons-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: fit-content;       /* Grid takes only the necessary width */
+    margin: 1em auto 0;        /* Centers the grid horizontally */
+}
+
+.buttons-container .btn {
+    width: 100%;              /* Ensures each button spans its grid cell */
+}

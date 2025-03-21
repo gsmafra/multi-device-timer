@@ -61,17 +61,6 @@ def resume_timer():
     })
     return 'Timer resumed'
 
-# Reset the timer
-@app.route('/reset')
-def reset_timer():
-    timer_ref.set({
-        'running': False,
-        'time_left': 0,
-        'start_time': 0
-    })
-    socketio.emit('update_timer', {'time_left': 0})
-    return 'Timer reset'
-
 # Home route - serves the web interface
 @app.route('/')
 def index():

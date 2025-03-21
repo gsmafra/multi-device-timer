@@ -70,11 +70,6 @@ function pauseTimer() {
     lockTimerInput(false);
 }
 
-function resetTimer() {
-    fetch('/reset');
-    lockTimerInput(false);
-}
-
 function resumeTimer() {
     lockTimerInput(true);
     fetch('/resume');
