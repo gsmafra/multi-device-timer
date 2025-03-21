@@ -1,59 +1,63 @@
 body {
     margin: 0;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: #f8f9fa;
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
-    color: #333;
+    color: #212529;
 }
 
 .container {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    padding: 2em;
-    max-width: 350px;
-    width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    padding: 2.5em;
+    width: 320px;
     text-align: center;
 }
 
 /* Timer input styling - fixed width and centered */
 #timerDisplay {
-    font-size: 2em;
+    font-size: 3.2em;
+    font-weight: 300;
     text-align: center;
-    width: 200px;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    padding: 10px;
-    margin-bottom: 1em;
-    outline: none;
-    transition: border 0.3s;
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
+    width: 240px;
+    border: none;
+    border-radius: 12px;
+    padding: 0.5em;
+    margin-bottom: 1.5em;
+    background: #f8f9fa;
+    color: #212529;
+    transition: all 0.2s ease;
 }
 
 #timerDisplay:focus {
-    border-color: #007BFF;
+    outline: none;
+    background: #e9ecef;
 }
 
 /* Button styling */
 .btn {
-    background-color: #007BFF;
+    background-color: #228be6;
     color: white;
     border: none;
-    padding: 10px 16px;
-    margin: 5px;
-    border-radius: 4px;
+    padding: 1em;
+    border-radius: 12px;
     cursor: pointer;
-    font-size: 1em;
-    transition: background 0.3s;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .btn:hover {
-    background-color: #0056b3;
+    background-color: #1c7ed6;
+    transform: translateY(-1px);
+}
+
+.btn:active {
+    transform: translateY(0);
 }
 
 /* Flashing effect */
@@ -62,20 +66,16 @@ body {
 }
 
 @keyframes flash {
-    0%, 100% {
-        background-color: #fff;
-    }
-    50% {
-        background-color: #ffcccc;
-    }
+    0%, 100% { background-color: white; }
+    50% { background-color: #ffe3e3; }
 }
 
 .buttons-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    width: fit-content;       /* Grid takes only the necessary width */
-    margin: 1em auto 0;        /* Centers the grid horizontally */
+    gap: 12px;
+    width: 240px;
+    margin: 0 auto;
 }
 
 .buttons-container .btn {

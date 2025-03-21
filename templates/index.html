@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timer App</title>
+    <title>Timer</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap">
     <link rel="stylesheet" href="/static/main.css">
     <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.5.1/dist/socket.io.min.js"></script>
     <script src="/static/main.js" defer></script>
 </head>
 <body>
     <div class="container">
-        <!-- Single input for both display and editing -->
         <input type="text" id="timerDisplay" value="00:00:00" placeholder="hh:mm:ss" />
         <div class="buttons-container">
             <button class="btn" onclick="startTimer()">Start</button>
