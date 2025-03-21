@@ -58,7 +58,12 @@
         }
 
         function startTimer() {
-            var duration = parseInt(document.getElementById("durationInput").value) * 60;
+            // Get values from three inputs
+            var hours = parseInt(document.getElementById("hoursInput").value) || 0;
+            var minutes = parseInt(document.getElementById("minutesInput").value) || 0;
+            var seconds = parseInt(document.getElementById("secondsInput").value) || 0;
+            // Calculate total duration in seconds
+            var duration = (hours * 3600) + (minutes * 60) + seconds;
             fetch('/start/' + duration);
         }
 
@@ -78,8 +83,12 @@
 <body>
     <h1>Timer App</h1>
     <div>
-        <h2 id="timerDisplay">00:00</h2>
-        <input type="number" id="durationInput" placeholder="Enter duration in minutes" />
+        <h2 id="timerDisplay">00:00:00</h2>
+        <!-- Three inputs for hh:mm:ss  -->
+        <input type="number" id="hoursInput" placeholder="HH" min="0" style="width: 50px;" />
+        <input type="number" id="minutesInput" placeholder="MM" min="0" max="59" style="width: 50px;" />
+        <input type="number" id="secondsInput" placeholder="SS" min="0" max="59" style="width: 50px;" />
+        <br/><br/>
         <button onclick="startTimer()">Start Timer</button>
         <button onclick="pauseTimer()">Pause Timer</button>
         <button onclick="resumeTimer()">Resume Timer</button>
