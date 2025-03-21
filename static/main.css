@@ -81,3 +81,12 @@ body {
 .buttons-container .btn {
     width: 100%;              /* Ensures each button spans its grid cell */
 }
+
+/* Preset buttons container styling */
+.preset-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    margin-top: 1.5em;
+}

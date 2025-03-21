@@ -74,3 +74,9 @@ function resumeTimer() {
     lockTimerInput(true);
     fetch('/resume');
 }
+
+function presetTimer(duration) {
+    // This function restarts the timer with a preset duration.
+    lockTimerInput(true);
+    fetch('/start/' + duration);
+}
