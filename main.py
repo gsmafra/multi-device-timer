@@ -20,31 +20,35 @@ socketio = SocketIO(app)
 timer_ref = db.reference('timer')
 
 # Timer function
-def run_timer():
+def run_timer(end_time):
     while True:
+        time.sleep(0.5)  # Check more frequently for smoother updates
+        current_time = time.time()
+
+        # Check if the timer is still running
         timer_data = timer_ref.get()
-        if timer_data and timer_data['running']:
-            time.sleep(1)
-            elapsed_time = int(time.time() - timer_data['start_time'])
-            time_left = max(0, timer_data['time_left'] - elapsed_time)
-            timer_ref.update({
-                'time_left': time_left,
-                'start_time': time.time()  # Reset start time
-            })
-            socketio.emit('update_timer', {'time_left': time_left})
-            if time_left == 0:
-                socketio.emit('timer_finished')
-                timer_ref.update({'running': False})
+        if not timer_data.get('running', False):
+            break
+
+        time_left = int(max(0, end_time - current_time))
+        timer_ref.update({'time_left': time_left})
+        socketio.emit('update_timer', {'time_left': time_left})
+
+        if time_left == 0:
+            socketio.emit('timer_finished')
+            timer_ref.update({'running': False})
+            break
 
 # Start the timer
 @app.route('/start/<int:duration>')
 def start_timer(duration):
+    end_time = time.time() + duration
     timer_ref.set({
         'running': True,
         'time_left': duration,
-        'start_time': time.time()
+        'end_time': end_time  # store the end_time if needed
     })
-    threading.Thread(target=run_timer, daemon=True).start()
+    threading.Thread(target=run_timer, args=(end_time,), daemon=True).start()
     return 'Timer started'
 
 # Pause the timer
@@ -56,11 +60,20 @@ def pause_timer():
 # Resume the timer
 @app.route('/resume')
 def resume_timer():
-    # Reset start_time on resume to avoid a jump in elapsed time
+    timer_data = timer_ref.get()
+    if not timer_data or 'time_left' not in timer_data:
+        return 'No timer to resume.', 400
+
+    # Calculate remaining time and new ending time
+    remaining = timer_data['time_left']
+    new_end_time = time.time() + remaining
+
     timer_ref.update({
         'running': True,
-        'start_time': time.time()
+        'start_time': time.time(),
+        'end_time': new_end_time
     })
+    threading.Thread(target=run_timer, args=(new_end_time,), daemon=True).start()
     return 'Timer resumed'
 
 # Add an endpoint to claim active status
