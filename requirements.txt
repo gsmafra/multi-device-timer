@@ -1,5 +1,4 @@
 APScheduler==3.11.0
-backports.zoneinfo==0.2.1
 bidict==0.23.1
 blinker==1.8.2
 CacheControl==0.14.2
