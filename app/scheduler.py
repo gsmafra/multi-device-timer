@@ -14,8 +14,8 @@ def scheduled_ping():
     except Exception as e:
         print("Error during scheduled ping:", e)
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(func=scheduled_ping, trigger="interval", minutes=14)
-scheduler.start()
-
-atexit.register(lambda: scheduler.shutdown())
+def init_scheduler():
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=scheduled_ping, trigger="interval", minutes=14)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
