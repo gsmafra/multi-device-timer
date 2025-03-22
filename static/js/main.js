@@ -1,7 +1,7 @@
 import { socket } from './socket.js';
 import { myDeviceId, claimActive } from './device.js';
 import { formatTime, parseTime, lockTimerInput } from './timerUI.js';
-import { startTimer, pauseTimer, resumeTimer, presetTimer } from './timerActions.js';
+import { startTimer, pauseTimer, presetTimer } from './timerActions.js';
 
 // Preload the audio file
 const audio = new Audio('static/siren-alert-96052.mp3');
@@ -36,7 +36,6 @@ window.dismissAlert = function() {
 // Expose functions to the global scope for HTML event handlers
 window.startTimer = startTimer;
 window.pauseTimer = pauseTimer;
-window.resumeTimer = resumeTimer;
 window.presetTimer = presetTimer;
 window.claimActive = claimActive;
 window.formatTime = formatTime;

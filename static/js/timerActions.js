@@ -15,12 +15,7 @@ export function pauseTimer() {
     fetch('/pause');
     lockTimerInput(false);
 }
-  
-export function resumeTimer() {
-    lockTimerInput(true);
-    fetch('/resume');
-}
-  
+
 export function presetTimer(duration) {
     lockTimerInput(true);
     fetch('/start/' + duration);

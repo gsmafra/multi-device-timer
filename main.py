@@ -51,32 +51,11 @@ def start_timer(duration):
     threading.Thread(target=run_timer, args=(end_time,), daemon=True).start()
     return 'Timer started'
 
-# Pause the timer
 @app.route('/pause')
 def pause_timer():
     timer_ref.update({'running': False})
     return 'Timer paused'
 
-# Resume the timer
-@app.route('/resume')
-def resume_timer():
-    timer_data = timer_ref.get()
-    if not timer_data or 'time_left' not in timer_data:
-        return 'No timer to resume.', 400
-
-    # Calculate remaining time and new ending time
-    remaining = timer_data['time_left']
-    new_end_time = time.time() + remaining
-
-    timer_ref.update({
-        'running': True,
-        'start_time': time.time(),
-        'end_time': new_end_time
-    })
-    threading.Thread(target=run_timer, args=(new_end_time,), daemon=True).start()
-    return 'Timer resumed'
-
-# Add an endpoint to claim active status
 @app.route('/claim_active/<deviceid>')
 def claim_active(deviceid):
     active_ref = db.reference('active_device')
@@ -85,7 +64,6 @@ def claim_active(deviceid):
     socketio.emit('active_device', {'active_device': deviceid})
     return 'Active device claimed'
 
-# Ping endpoint
 @app.route('/ping')
 def ping():
     return 'Pong', 200
