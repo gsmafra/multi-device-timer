@@ -7,8 +7,6 @@ from firebase_admin import credentials, db
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 
-import scheduler
-
 # Initialize Firebase Admin SDK
 cred = credentials.Certificate(environ['FIREBASE_KEY_PATH'])
 firebase_admin.initialize_app(cred, {'databaseURL': 'https://multi-device-timer-default-rtdb.firebaseio.com/'})
