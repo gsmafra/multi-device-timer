@@ -2,24 +2,29 @@ import time
 import threading
 from os import environ
 
+from flask import Blueprint, render_template
+from flask_socketio import emit
+
 import firebase_admin
 from firebase_admin import credentials, db
-from flask import Flask, render_template
-from flask_socketio import SocketIO, emit
 
-import scheduler
+# Create a blueprint for our routes
+bp = Blueprint('routes', __name__)
 
-# Initialize Firebase Admin SDK
-cred = credentials.Certificate(environ['FIREBASE_KEY_PATH'])
-firebase_admin.initialize_app(cred, {'databaseURL': 'https://multi-device-timer-default-rtdb.firebaseio.com/'})
+# Initialize Firebase Admin SDK if not already initialized.
+if not firebase_admin._apps:
+    cred = credentials.Certificate(environ['FIREBASE_KEY_PATH'])
+    firebase_admin.initialize_app(cred, {
+        'databaseURL': 'https://multi-device-timer-default-rtdb.firebaseio.com/'
+    })
 
-app = Flask(__name__)
-socketio = SocketIO(app)
-
-# Firebase database reference
+# Get a reference to the Firebase realtime database
 timer_ref = db.reference('timer')
 
-# Timer function
+# Import the shared SocketIO instance from __init__.py
+from app import socketio
+
+# Timer function using a fixed end_time for accuracy
 def run_timer(end_time):
     while True:
         time.sleep(0.5)  # Check more frequently for smoother updates
@@ -39,41 +44,37 @@ def run_timer(end_time):
             timer_ref.update({'running': False})
             break
 
-# Start the timer
-@app.route('/start/<int:duration>')
+@bp.route('/start/<int:duration>')
 def start_timer(duration):
     end_time = time.time() + duration
     timer_ref.set({
         'running': True,
         'time_left': duration,
-        'end_time': end_time  # store the end_time if needed
+        'end_time': end_time
     })
     threading.Thread(target=run_timer, args=(end_time,), daemon=True).start()
     return 'Timer started'
 
-@app.route('/pause')
+@bp.route('/pause')
 def pause_timer():
     timer_ref.update({'running': False})
     return 'Timer paused'
 
-@app.route('/claim_active/<deviceid>')
+@bp.route('/claim_active/<deviceid>')
 def claim_active(deviceid):
     active_ref = db.reference('active_device')
     active_ref.set(deviceid)
-    # Emit new active device to all clients
     socketio.emit('active_device', {'active_device': deviceid})
     return 'Active device claimed'
 
-@app.route('/ping')
+@bp.route('/ping')
 def ping():
     return 'Pong', 200
 
-# Home route - serves the web interface
-@app.route('/')
+@bp.route('/')
 def index():
     return render_template('index.html')
 
-# SocketIO event handling
 @socketio.on('connect')
 def on_connect():
     timer_data = timer_ref.get()
@@ -82,8 +83,3 @@ def on_connect():
     active_ref = db.reference('active_device')
     active = active_ref.get() or ''
     emit('active_device', {'active_device': active})
-
-# Start the Flask app with SocketIO
-if __name__ == '__main__':
-    port = int(environ.get('PORT', 5000))
-    socketio.run(app, host='0.0.0.0', port=port, allow_unsafe_werkzeug=True)
