@@ -10,7 +10,6 @@ export let currentActiveDevice = null;
 // Update active device status based on socket events (you might also export a function to update the UI)
 export function updateActiveDevice(activeDevice) {
     currentActiveDevice = activeDevice;
-    console.log("updateActiveDevice: activeDevice =", activeDevice, " myDeviceId =", myDeviceId);
     const activeStatusElem = document.getElementById('activeStatus');
     const claimBtn = document.getElementById('claimActiveButton');
 
