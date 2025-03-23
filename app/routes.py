@@ -46,6 +46,9 @@ def run_timer(end_time):
 
 @bp.route('/start/<int:duration>')
 def start_timer(duration):
+    # Stop any currently running timer by updating the DB
+    timer_ref.update({'running': False})
+
     end_time = time.time() + duration
     timer_ref.set({
         'running': True,
