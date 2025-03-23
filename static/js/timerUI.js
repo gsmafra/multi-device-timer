@@ -27,3 +27,19 @@ export function lockTimerInput(locked) {
         timerInput.removeAttribute("readonly");
     }
 }
+
+export function readTimerInput() {
+    const hours = document.getElementById("hoursInput").value;
+    const minutes = document.getElementById("minutesInput").value;
+    const seconds = document.getElementById("secondsInput").value;
+    return (parseInt(hours)||0) * 3600 + (parseInt(minutes)||0) * 60 + (parseInt(seconds)||0);
+}
+
+export function updateTimerDisplay(seconds) {
+    const hrs = String(Math.floor(seconds / 3600)).padStart(2, "0");
+    const mins = String(Math.floor((seconds % 3600) / 60)).padStart(2, "0");
+    const secs = String(seconds % 60).padStart(2, "0");
+    document.getElementById("hoursInput").value = hrs;
+    document.getElementById("minutesInput").value = mins;
+    document.getElementById("secondsInput").value = secs;
+}

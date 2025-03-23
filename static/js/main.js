@@ -1,6 +1,6 @@
 import { socket } from './socket.js';
 import { myDeviceId, claimActive } from './device.js';
-import { formatTime, parseTime, lockTimerInput } from './timerUI.js';
+import { formatTime, parseTime, lockTimerInput, updateTimerDisplay } from './timerUI.js';
 import { startTimer, pauseTimer, presetTimer } from './timerActions.js';
 
 // Preload the audio file
@@ -23,7 +23,7 @@ socket.on('timer_finished', function() {
 });
 
 socket.on('update_timer', function(data) {
-    document.getElementById("timerDisplay").value = formatTime(data.time_left);
+    updateTimerDisplay(data.time_left);
 });
   
 // Stop the alert function can be here
@@ -41,3 +41,31 @@ window.claimActive = claimActive;
 window.formatTime = formatTime;
 window.parseTime = parseTime;
 window.lockTimerInput = lockTimerInput;
+
+// Prevent non-numeric keys and colon input in the timer field
+document.addEventListener("DOMContentLoaded", () => {
+    const inputs = document.querySelectorAll(".timer-container input");
+  
+    inputs.forEach((input, idx) => {
+        input.addEventListener("keydown", (event) => {
+            const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+            if (allowedKeys.includes(event.key)) return;
+            if (!/^\d$/.test(event.key)) {
+                event.preventDefault();
+            }
+        });
+  
+        input.addEventListener("input", () => {
+            if (input.value.length === 2 && idx < inputs.length - 1) {
+                inputs[idx + 1].focus();
+            }
+        });
+  
+        input.addEventListener("paste", (event) => {
+            const pasteData = (event.clipboardData || window.clipboardData).getData("text");
+            if (!/^\d{1,2}$/.test(pasteData)) {
+                event.preventDefault();
+            }
+        });
+    });
+});

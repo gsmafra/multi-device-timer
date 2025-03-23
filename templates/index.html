@@ -12,7 +12,13 @@
 </head>
 <body>
     <div class="container">
-        <input type="text" id="timerDisplay" value="00:00:00" placeholder="hh:mm:ss" />
+        <div class="timer-container">
+            <input type="text" id="hoursInput" maxlength="2" placeholder="00">
+            <span class="colon">:</span>
+            <input type="text" id="minutesInput" maxlength="2" placeholder="00">
+            <span class="colon">:</span>
+            <input type="text" id="secondsInput" maxlength="2" placeholder="00">
+        </div>
         <div class="buttons-container">
             <button class="btn" onclick="startTimer()">Start</button>
             <button class="btn" onclick="pauseTimer()">Pause</button>

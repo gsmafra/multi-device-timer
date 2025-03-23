@@ -18,27 +18,54 @@ body {
     text-align: center;
 }
 
-/* Timer input styling - fixed width and centered */
-#timerDisplay {
-    font-size: 3.2em;
-    font-weight: 300;
-    text-align: center;
-    width: 240px;
-    border: none;
+.timer-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    gap: 0;
+    background-color: #f8f9fa;
     border-radius: 12px;
-    padding: 0.5em;
-    margin-bottom: 1.5em;
-    background: #f8f9fa;
+    padding: 0.1em 0.3em;
+    font-size: 4em;
+    font-weight: 300;
     color: #212529;
-    transition: all 0.2s ease;
+    margin-bottom: 0.5em;
 }
 
-#timerDisplay:focus {
+.timer-container input,
+.timer-container .colon {
+    background: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    font-family: inherit;
+}
+
+.timer-container input {
+    width: 1.3em;
+    font-size: inherit;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    background: transparent;
+    border: none;
+}
+
+.timer-container .colon {
+    font-size: 0.8em;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    width: 0.3em;
+}
+
+.timer-container input:focus {
     outline: none;
-    background: #e9ecef;
 }
 
-/* Button styling */
 .btn {
     background-color: #228be6;
     color: white;
@@ -60,7 +87,6 @@ body {
     transform: translateY(0);
 }
 
-/* Flashing effect */
 .flashing {
     animation: flash 1s infinite;
 }
@@ -80,10 +106,9 @@ body {
 }
 
 .buttons-container .btn {
-    width: 100%;              /* Ensures each button spans its grid cell */
+    width: 100%;
 }
 
-/* Preset buttons container styling */
 .preset-container {
     display: flex;
     justify-content: center;
