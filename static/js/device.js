@@ -10,33 +10,18 @@ export let currentActiveDevice = null;
 // Update active device status based on socket events (you might also export a function to update the UI)
 export function updateActiveDevice(activeDevice) {
     currentActiveDevice = activeDevice;
-    const activeStatusElem = document.getElementById('activeStatus');
     const claimBtn = document.getElementById('claimActiveButton');
+    if (!claimBtn) return;
 
     if (activeDevice === myDeviceId) {
-        if (activeStatusElem) {
-            activeStatusElem.textContent = "this is the active device";
-        }
-        if (claimBtn) {
-            claimBtn.classList.add("active");
-            claimBtn.textContent = "device is active";
-        }
-    } else if (activeDevice) {
-        if (activeStatusElem) {
-            activeStatusElem.textContent = "active device: " + activeDevice;
-        }
-        if (claimBtn) {
-            claimBtn.classList.remove("active");
-            claimBtn.textContent = "claim active";
-        }
+        claimBtn.classList.add("active");
+        claimBtn.textContent = "device is active";
+    } else if (activeDevice) {  // When another device is active, allow clicking to force-claim
+        claimBtn.classList.remove("active");
+        claimBtn.textContent = "claim active";
     } else {
-        if (activeStatusElem) {
-            activeStatusElem.textContent = "no active device";
-        }
-        if (claimBtn) {
-            claimBtn.classList.remove("active");
-            claimBtn.textContent = "claim active";
-        }
+        claimBtn.classList.remove("active");
+        claimBtn.textContent = "claim active";
     }
 }
   
