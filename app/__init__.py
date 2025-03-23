@@ -1,9 +1,6 @@
 from flask import Flask
-from flask_socketio import SocketIO
-
+from app.socketio import socketio
 from app.scheduler import init_scheduler
-
-socketio = SocketIO()
 
 def create_app():
     app = Flask(__name__, template_folder='../templates', static_folder='../static')

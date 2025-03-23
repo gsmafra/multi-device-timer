@@ -2,11 +2,12 @@ import time
 import threading
 from os import environ
 
+import firebase_admin
 from flask import Blueprint, render_template
 from flask_socketio import emit
-
-import firebase_admin
 from firebase_admin import credentials, db
+
+from app.socketio import socketio
 
 bp = Blueprint('routes', __name__)
 
@@ -22,8 +23,6 @@ def get_timer_ref():
 
 def get_active_ref():
     return db.reference('active_device')
-
-from app import socketio
 
 def run_timer(end_time):
     timer_ref = get_timer_ref()
