@@ -67,7 +67,7 @@ body {
 }
 
 .btn {
-    background-color: #228be6;
+    background-color: #6c757d;
     color: white;
     border: none;
     padding: 1em;
@@ -76,15 +76,26 @@ body {
     font-size: 0.95em;
     font-weight: 500;
     transition: all 0.2s ease;
+    font-family: 'Cyberbuck', sans-serif;
+    text-transform: lowercase;
 }
 
 .btn:hover {
-    background-color: #1c7ed6;
+    background-color: #5a6268;
     transform: translateY(-1px);
 }
 
 .btn:active {
     transform: translateY(0);
+}
+
+.btn.claim-active {
+    background-color: #6c757d;
+    grid-area: claim;
+}
+
+.btn.claim-active.active {
+    background-color: #3b7749;
 }
 
 .flashing {
@@ -125,4 +136,16 @@ body {
     gap: 12px;
     font-size: 0.9em;
     color: #555;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas:
+        "start pause dismiss"
+        "two one thirty"
+        "claim claim claim";
+    gap: 12px;
+    margin-top: 1.5em;
 }

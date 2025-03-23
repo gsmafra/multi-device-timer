@@ -10,22 +10,47 @@ export let currentActiveDevice = null;
 // Update active device status based on socket events (you might also export a function to update the UI)
 export function updateActiveDevice(activeDevice) {
     currentActiveDevice = activeDevice;
+    console.log("updateActiveDevice: activeDevice =", activeDevice, " myDeviceId =", myDeviceId);
     const activeStatusElem = document.getElementById('activeStatus');
-    if (currentActiveDevice === myDeviceId) {
-        activeStatusElem.textContent = "This is the active device";
-    } else if (currentActiveDevice) {
-        activeStatusElem.textContent = "Active device: " + currentActiveDevice;
+    const claimBtn = document.getElementById('claimActiveButton');
+
+    if (activeDevice === myDeviceId) {
+        if (activeStatusElem) {
+            activeStatusElem.textContent = "this is the active device";
+        }
+        if (claimBtn) {
+            claimBtn.classList.add("active");
+            claimBtn.textContent = "device is active";
+        }
+    } else if (activeDevice) {
+        if (activeStatusElem) {
+            activeStatusElem.textContent = "active device: " + activeDevice;
+        }
+        if (claimBtn) {
+            claimBtn.classList.remove("active");
+            claimBtn.textContent = "claim active";
+        }
     } else {
-        activeStatusElem.textContent = "No active device";
+        if (activeStatusElem) {
+            activeStatusElem.textContent = "no active device";
+        }
+        if (claimBtn) {
+            claimBtn.classList.remove("active");
+            claimBtn.textContent = "claim active";
+        }
     }
 }
   
 // Claim active device
 export function claimActive() {
+    // Send claim request to the server (ensure your backend marks the device as active)
     fetch('/claim_active/' + myDeviceId)
-        .then(response => response.text())
-        .then(txt => console.log("Claim active response:", txt))
-        .catch(err => console.error(err));
+        .then(response => {
+            if (response.ok) {
+                updateActiveDevice(myDeviceId);
+            }
+        })
+        .catch(error => console.error("Error claiming active:", error));
 }
   
 // Listen for active_device updates

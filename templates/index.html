@@ -19,19 +19,14 @@
             <span class="colon">:</span>
             <input type="text" id="secondsInput" maxlength="2" placeholder="00">
         </div>
-        <div class="buttons-container">
-            <button class="btn" onclick="startTimer()">Start</button>
-            <button class="btn" onclick="pauseTimer()">Pause</button>
-            <button class="btn" onclick="dismissAlert()">Dismiss</button>
-        </div>
-        <div class="preset-container">
-            <button class="btn" onclick="presetTimer(7200)">2 Hours</button>
-            <button class="btn" onclick="presetTimer(3600)">1 Hour</button>
-            <button class="btn" onclick="presetTimer(1800)">30 Minutes</button>
-        </div>
-        <div class="active-container">
-            <span id="activeStatus">Loading...</span>
-            <button class="btn" onclick="claimActive()">Claim Active</button>
+        <div class="button-grid">
+            <button class="btn" style="grid-area: start;" onclick="startTimer()">start</button>
+            <button class="btn" style="grid-area: pause;" onclick="pauseTimer()">pause</button>
+            <button class="btn" style="grid-area: dismiss;" onclick="dismissAlert()">dismiss</button>
+            <button class="btn" style="grid-area: two;" onclick="presetTimer(7200)">2 hrs</button>
+            <button class="btn" style="grid-area: one;" onclick="presetTimer(3600)">1 hr</button>
+            <button class="btn" style="grid-area: thirty;" onclick="presetTimer(1800)">30 mins</button>
+            <button id="claimActiveButton" class="btn claim-active" onclick="claimActive()">claim active</button>
         </div>
     </div>
 </body>
