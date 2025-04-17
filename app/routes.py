@@ -83,9 +83,15 @@ def index():
 def on_connect():
     timer_ref = get_timer_ref()
     timer_data = timer_ref.get()
-    time_left = timer_data['time_left'] if timer_data else 0
+    time_left = timer_data.get('time_left', 0) if timer_data else 0
     emit('update_timer', {'time_left': time_left})
-    
+
     active_ref = get_active_ref()
     active = active_ref.get() or ''
     emit('active_device', {'active_device': active})
+
+@socketio.on('dismiss_alert_broadcast')
+def handle_dismiss_alert_broadcast():
+    """Handles the 'dismiss_alert_broadcast' event from a client."""
+    print('Received dismiss_alert_broadcast, broadcasting to all clients.')
+    emit('dismiss_alert', broadcast=True)
