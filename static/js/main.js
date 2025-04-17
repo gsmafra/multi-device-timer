@@ -24,14 +24,14 @@ socket.on('dismiss_alert', function() {
 // Listen for timer_finished event and trigger alert only if active
 socket.on('timer_finished', function() {
     import('./device.js').then(module => {
-       const { myDeviceId, currentActiveDevice } = module;
-       if (myDeviceId === currentActiveDevice) {
-           audio.currentTime = 0;
-           audio.play();
-           document.body.classList.add('flashing');
-       } else {
-           console.log('Timer finished, but this device is not active.');
-       }
+        const { myDeviceId, currentActiveDevice } = module;
+        if (myDeviceId === currentActiveDevice) {
+            audio.currentTime = 0;
+            audio.play();
+            document.body.classList.add('flashing');
+        } else {
+            console.log('Timer finished, but this device is not active.');
+        }
     });
 });
 
