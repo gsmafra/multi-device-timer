@@ -1,5 +1,6 @@
 from flask import Flask
 from app import routes
+from app.routes import init_firebase
 from app.socketio import socketio
 from app.scheduler import init_scheduler
 
@@ -10,6 +11,7 @@ def create_app():
     socketio.init_app(app)
     app.register_blueprint(routes.bp)
 
+    init_firebase()
     init_scheduler()
 
     return app
