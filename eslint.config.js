@@ -1,16 +1,29 @@
+// eslint.config.js
+const globals = require("globals");
+const js = require("@eslint/js"); // ESLint's recommended base rules
+
 module.exports = [
+  js.configs.recommended, // flat-compatible base config
   {
     languageOptions: {
-      ecmaVersion: 'latest', // Or your desired ECMAScript version
-      sourceType: 'script', // Or 'module'
+      ecmaVersion: "latest",
+      sourceType: "module",
+      parserOptions: {
+        ecmaFeatures: {
+          impliedStrict: true,
+        },
+      },
       globals: {
-        ...require('globals').browser, // Add browser globals
-        ...require('globals').es2021, // Add ES2021 globals
-        // Add other environments as needed (e.g., node: require('globals').node)
+        ...globals.browser,
+        ...globals.es2021,
       },
     },
     rules: {
-      // Your rules here
+      // Add rules similar to eslint-config-standard manually
+      "no-unused-vars": "warn",
+      semi: ["error", "never"],
+      quotes: ["error", "single"],
+      // Add more as needed
     },
   },
 ];

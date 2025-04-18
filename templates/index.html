@@ -1,35 +1,64 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Timer</title>
-    <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap">
-    <link rel="stylesheet" href="/static/css/base.css">
-    <link rel="stylesheet" href="/static/css/grid.css">
+    <link rel="icon" type="image/x-icon" href="/static/icons/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&display=swap"
+    />
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/grid.css" />
     <script src="https://cdn.socket.io/4.5.1/socket.io.min.js"></script>
     <script type="module" src="/static/js/main.js"></script>
-    <link rel="manifest" href="/static/manifest.json">
-</head>
-<body>
+    <link rel="manifest" href="/static/manifest.json" />
+  </head>
+  <body>
     <div class="container">
-        <div class="timer-container">
-            <input type="text" id="hoursInput" maxlength="2" placeholder="00">
-            <span class="colon">:</span>
-            <input type="text" id="minutesInput" maxlength="2" placeholder="00">
-            <span class="colon">:</span>
-            <input type="text" id="secondsInput" maxlength="2" placeholder="00">
-        </div>
-        <div class="button-grid">
-            <button class="btn" style="grid-area: start;" onclick="startTimer()">start</button>
-            <button class="btn" style="grid-area: pause;" onclick="pauseTimer()">pause</button>
-            <button class="btn" style="grid-area: dismiss;" onclick="broadcastDismissAlert()">dismiss</button>
-            <button class="btn" style="grid-area: two;" onclick="presetTimer(7200)">2 hrs</button>
-            <button class="btn" style="grid-area: one;" onclick="presetTimer(3600)">1 hr</button>
-            <button class="btn" style="grid-area: thirty;" onclick="presetTimer(1800)">30 mins</button>
-            <button id="claimActiveButton" class="btn claim-active" onclick="claimActive()">claim active</button>
-        </div>
+      <div class="timer-container">
+        <input type="text" id="hoursInput" maxlength="2" placeholder="00" />
+        <span class="colon">:</span>
+        <input type="text" id="minutesInput" maxlength="2" placeholder="00" />
+        <span class="colon">:</span>
+        <input type="text" id="secondsInput" maxlength="2" placeholder="00" />
+      </div>
+      <div class="button-grid">
+        <button class="btn" style="grid-area: start" onclick="startTimer()">
+          start
+        </button>
+        <button class="btn" style="grid-area: pause" onclick="pauseTimer()">
+          pause
+        </button>
+        <button
+          class="btn"
+          style="grid-area: dismiss"
+          onclick="broadcastDismissAlert()"
+        >
+          dismiss
+        </button>
+        <button class="btn" style="grid-area: two" onclick="presetTimer(7200)">
+          2 hrs
+        </button>
+        <button class="btn" style="grid-area: one" onclick="presetTimer(3600)">
+          1 hr
+        </button>
+        <button
+          class="btn"
+          style="grid-area: thirty"
+          onclick="presetTimer(1800)"
+        >
+          30 mins
+        </button>
+        <button
+          id="claimActiveButton"
+          class="btn claim-active"
+          onclick="claimActive()"
+        >
+          claim active
+        </button>
+      </div>
     </div>
-</body>
+  </body>
 </html>
