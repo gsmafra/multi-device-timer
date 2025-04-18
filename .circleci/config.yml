@@ -51,7 +51,7 @@ jobs:
           command: |
             git checkout main
             git merge staging --no-ff -m "Automated merge from staging after successful CI"
-            git remote set-url origin "https://$GITHUB_USER:$GITHUB_TOKEN@github.com/gsmafra/reverse-akinator.git"
+            git remote set-url origin "https://$GITHUB_USER:$GITHUB_TOKEN@github.com/gsmafra/multi-device-timer.git"
             git push origin main
 
 workflows:
