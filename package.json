@@ -1,0 +1,26 @@
+{
+  "name": "multi-device-timer",
+  "version": "1.0.0",
+  "description": "Timer app for personal use. Synchronized across multiple devices, so I can start tracking in my phone and be notified in the computer. Mostly vibe-coding.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gsmafra/multi-device-timer.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gsmafra/multi-device-timer/issues"
+  },
+  "homepage": "https://github.com/gsmafra/multi-device-timer#readme",
+  "devDependencies": {
+    "eslint": "^9.24.0"
+  }
+}
