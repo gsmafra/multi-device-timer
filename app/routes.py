@@ -17,10 +17,6 @@ def init_firebase():
     firebase_admin.initialize_app(cred, {"databaseURL": environ["FIREBASE_URL"]})
 
 
-# Call the initialization function during blueprint registration or app startup.
-init_firebase()
-
-
 def get_timer_ref():
     return db.reference("timer")
 

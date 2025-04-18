@@ -1,0 +1,74 @@
+version: 2.1
+
+commands:
+  install_dependencies:
+    steps:
+      - run:
+          name: Install Dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            pip install -r requirements-dev.txt
+
+  run_pylint:
+    steps:
+      - run:
+          name: Run Pylint
+          command: |
+            . venv/bin/activate
+            pylint app tests
+
+  run_pytest:
+    steps:
+      - run:
+          name: Run Pytest
+          command: |
+            . venv/bin/activate
+            pytest tests
+
+jobs:
+  build-and-test-staging:
+    docker:
+      - image: cimg/python:3.11
+    steps:
+      - checkout
+      - install_dependencies
+      - run_pylint
+      - run_pytest
+
+  merge-to-main:
+    docker:
+      - image: alpine/git
+    steps:
+      - checkout
+      - run:
+          name: Configure Git User
+          command: |
+            git config user.email "$GIT_EMAIL"
+            git config user.name "$GIT_USER"
+      - run:
+          name: Merge staging to main
+          command: |
+            git checkout main
+            git merge staging --no-ff -m "Automated merge from staging after successful CI"
+            git remote set-url origin "https://$GITHUB_USER:$GITHUB_TOKEN@github.com/gsmafra/multi-device-timer.git"
+            git push origin main
+
+workflows:
+  version: 2
+  staging-to-main:
+    jobs:
+      - build-and-test-staging:
+          name: Build and Test Staging
+          filters:
+            branches:
+              only:
+                - staging
+      - merge-to-main:
+          name: Merge to Main
+          requires:
+            - Build and Test Staging
+          filters:
+            branches:
+              only:
+                - staging

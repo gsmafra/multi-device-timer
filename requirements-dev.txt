@@ -30,6 +30,7 @@ h11==0.14.0
 httplib2==0.22.0
 idna==3.10
 importlib_metadata==8.5.0
+iniconfig==2.1.0
 isort==6.0.1
 itsdangerous==2.2.0
 Jinja2==3.1.6
@@ -40,6 +41,7 @@ mypy-extensions==1.0.0
 packaging==24.2
 pathspec==0.12.1
 platformdirs==4.3.7
+pluggy==1.5.0
 proto-plus==1.26.1
 protobuf==5.29.4
 pyasn1==0.6.1
@@ -48,6 +50,7 @@ pycparser==2.22
 PyJWT==2.9.0
 pylint==3.3.6
 pyparsing==3.1.4
+pytest==8.3.5
 python-engineio==4.11.2
 python-socketio==5.12.1
 requests==2.32.3
